@@ -7,7 +7,7 @@ namespace ExerciseApp
     {
         static void Main(string[] args)
         {
-            StopWatch();
+            
         }
 
         public static void StopWatch()
@@ -48,6 +48,23 @@ namespace ExerciseApp
 
             var vote1 = post.CountVote;
             Console.WriteLine("Number of post vote: {0}", vote1); // return 1
+        }
+
+        public static void Stack()
+        {
+            var stack = new Stack();
+
+            for (int i = 0; i < 5; i++)
+            {
+                stack.Push(i);
+            }
+
+            stack.Clear(); // after clear, exception message appeared
+
+            for (int i = 0; i < 5; i++)
+            {
+                Console.WriteLine(stack.Pop());
+            }
         }
     }
 }
