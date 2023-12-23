@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace ExerciseApp
 {
@@ -6,15 +7,27 @@ namespace ExerciseApp
     {
         static void Main(string[] args)
         {
-            
+            StopWatch();
         }
 
         public static void StopWatch()
         {
             var stopWatch = new StopWatch();
-            stopWatch.Start();
-            stopWatch.Stop();
-            stopWatch.Duration();
+
+            for (int i = 0; i < 3; i++)
+            {
+                stopWatch.Start();
+
+                Thread.Sleep(1000); // 1000 miliseconds = 1 sec
+
+                stopWatch.Stop();
+
+                Console.WriteLine("Duration: ");
+                stopWatch.Duration();
+
+                Console.WriteLine("Please press enter to run stopwatch one more time: ");
+                Console.ReadLine();
+            }
         }
 
         public static void Post()
