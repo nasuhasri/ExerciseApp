@@ -1,13 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace ExerciseApp
 {
+    public interface IExecute
+    {
+        void Execute();
+    }
+
+    public class VideoWorkflow : IExecute
+    {
+        public void Execute()
+        {
+            Console.WriteLine("Run video workflow...");
+        }
+    }
+
+    public class WebServiceWorkflow : IExecute
+    {
+        public void Execute()
+        {
+            Console.WriteLine("Run webservice workflow...");
+        }
+    }
+
+    public class EmailWorkflow : IExecute
+    {
+        public void Execute()
+        {
+            Console.WriteLine("Run send email workflow...");
+        }
+    }
+
+    public class ChangeStatusWorkflow : IExecute
+    {
+        public void Execute()
+        {
+            Console.WriteLine("Run change status workflow...");
+        }
+    }
+
+    public class WorkflowEngine
+    {
+        public void Run(List<IExecute> workflow)
+        {
+            foreach (var workflowItem in workflow)
+            {
+                workflowItem.Execute();
+            }
+        }
+    }
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            
+            var listWorkflow = new List<IExecute>();
+            listWorkflow.Add(new VideoWorkflow());
+            listWorkflow.Add(new WebServiceWorkflow());
+            listWorkflow.Add(new EmailWorkflow());
+            listWorkflow.Add(new ChangeStatusWorkflow());
+
+            var workFlowEngine = new WorkflowEngine();
+            workFlowEngine.Run(listWorkflow);
         }
 
         public static void StopWatch()
