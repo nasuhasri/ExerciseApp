@@ -4,12 +4,35 @@ using System.Threading;
 
 namespace ExerciseApp
 {
-    public interface IExecute
+    public class Workflow : IWorkflow
     {
-        void Execute();
-    }
+        private readonly List<ITask> _tasks;
 
-    public class VideoWorkflow : IExecute
+        public Workflow()
+        {
+            _tasks = new List<ITask>();
+        }
+
+        public void Add(ITask task)
+        {
+            _tasks.Add(task);
+        }
+
+        public void Remove(ITask task)
+        {
+            _tasks.Remove(task);
+        }
+
+        // if we put list instead of IEnumerable, the client will have access to our private list
+        // because we already have the Add() and we dont want the client to add method directly on our private lists
+        // IEnumerable is purely interface that do not have any method on it and allow us to enumerate a list
+        // so we return the readonly of our list
+        public IEnumerable<ITask> GetTasks()
+        {
+            return _tasks;
+        }
+    }
+    public class VideoWorkflow : ITask
     {
         public void Execute()
         {
@@ -17,7 +40,7 @@ namespace ExerciseApp
         }
     }
 
-    public class WebServiceWorkflow : IExecute
+    public class WebServiceWorkflow : ITask
     {
         public void Execute()
         {
@@ -25,7 +48,7 @@ namespace ExerciseApp
         }
     }
 
-    public class EmailWorkflow : IExecute
+    public class EmailWorkflow : ITask
     {
         public void Execute()
         {
@@ -33,7 +56,7 @@ namespace ExerciseApp
         }
     }
 
-    public class ChangeStatusWorkflow : IExecute
+    public class ChangeStatusWorkflow : ITask
     {
         public void Execute()
         {
@@ -43,11 +66,28 @@ namespace ExerciseApp
 
     public class WorkflowEngine
     {
-        public void Run(List<IExecute> workflow)
+        public void RunOld(List<ITask> workflow)
         {
             foreach (var workflowItem in workflow)
             {
                 workflowItem.Execute();
+            }
+        }
+
+        public void Run(IWorkflow workflow)
+        {
+            foreach (ITask task in workflow.GetTasks())
+            {
+                try
+                {
+                    task.Execute();
+                }
+                catch (Exception)
+                {
+                    // logging
+                    // terminate and persists the state of workflow
+                    throw;
+                }
             }
         }
     }
@@ -56,14 +96,14 @@ namespace ExerciseApp
     {
         static void Main(string[] args)
         {
-            var listWorkflow = new List<IExecute>();
-            listWorkflow.Add(new VideoWorkflow());
-            listWorkflow.Add(new WebServiceWorkflow());
-            listWorkflow.Add(new EmailWorkflow());
-            listWorkflow.Add(new ChangeStatusWorkflow());
+            Workflow workflow = new Workflow();
+            workflow.Add(new VideoWorkflow());
+            workflow.Add(new WebServiceWorkflow());
+            workflow.Add(new EmailWorkflow());
+            workflow.Add(new ChangeStatusWorkflow());
 
             var workFlowEngine = new WorkflowEngine();
-            workFlowEngine.Run(listWorkflow);
+            workFlowEngine.Run(workflow);
         }
 
         public static void StopWatch()
