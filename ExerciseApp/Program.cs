@@ -1,109 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace ExerciseApp
 {
-    public class Workflow : IWorkflow
-    {
-        private readonly List<ITask> _tasks;
-
-        public Workflow()
-        {
-            _tasks = new List<ITask>();
-        }
-
-        public void Add(ITask task)
-        {
-            _tasks.Add(task);
-        }
-
-        public void Remove(ITask task)
-        {
-            _tasks.Remove(task);
-        }
-
-        // if we put list instead of IEnumerable, the client will have access to our private list
-        // because we already have the Add() and we dont want the client to add method directly on our private lists
-        // IEnumerable is purely interface that do not have any method on it and allow us to enumerate a list
-        // so we return the readonly of our list
-        public IEnumerable<ITask> GetTasks()
-        {
-            return _tasks;
-        }
-    }
-    public class VideoWorkflow : ITask
-    {
-        public void Execute()
-        {
-            Console.WriteLine("Run video workflow...");
-        }
-    }
-
-    public class WebServiceWorkflow : ITask
-    {
-        public void Execute()
-        {
-            Console.WriteLine("Run webservice workflow...");
-        }
-    }
-
-    public class EmailWorkflow : ITask
-    {
-        public void Execute()
-        {
-            Console.WriteLine("Run send email workflow...");
-        }
-    }
-
-    public class ChangeStatusWorkflow : ITask
-    {
-        public void Execute()
-        {
-            Console.WriteLine("Run change status workflow...");
-        }
-    }
-
-    public class WorkflowEngine
-    {
-        public void RunOld(List<ITask> workflow)
-        {
-            foreach (var workflowItem in workflow)
-            {
-                workflowItem.Execute();
-            }
-        }
-
-        public void Run(IWorkflow workflow)
-        {
-            foreach (ITask task in workflow.GetTasks())
-            {
-                try
-                {
-                    task.Execute();
-                }
-                catch (Exception)
-                {
-                    // logging
-                    // terminate and persists the state of workflow
-                    throw;
-                }
-            }
-        }
-    }
-
     internal class Program
     {
         static void Main(string[] args)
         {
-            Workflow workflow = new Workflow();
-            workflow.Add(new VideoWorkflow());
-            workflow.Add(new WebServiceWorkflow());
-            workflow.Add(new EmailWorkflow());
-            workflow.Add(new ChangeStatusWorkflow());
-
-            var workFlowEngine = new WorkflowEngine();
-            workFlowEngine.Run(workflow);
+            
         }
 
         public static void StopWatch()
@@ -161,6 +65,18 @@ namespace ExerciseApp
             {
                 Console.WriteLine(stack.Pop());
             }
+        }
+
+        public static void Workflow()
+        {
+            Workflow workflow = new Workflow();
+            workflow.Add(new VideoWorkflow());
+            workflow.Add(new WebServiceWorkflow());
+            workflow.Add(new EmailWorkflow());
+            workflow.Add(new ChangeStatusWorkflow());
+
+            var workFlowEngine = new WorkflowEngine();
+            workFlowEngine.Run(workflow);
         }
     }
 }
