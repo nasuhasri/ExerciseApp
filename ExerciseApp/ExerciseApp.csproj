@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeStatusWorkflow.cs" />
+    <Compile Include="DbCommand.cs" />
     <Compile Include="DbConnection.cs" />
     <Compile Include="EmailWorkflow.cs" />
     <Compile Include="ITask.cs" />

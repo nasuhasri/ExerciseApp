@@ -3,12 +3,17 @@ using System.Threading;
 
 namespace ExerciseApp
 {
-
     internal class Program
     {
         static void Main(string[] args)
         {
-            DbConnection();
+            string connectionString = "Server=(local);Initial Catalog=AdventureWorks;" + "Integrated Security=true";
+
+            var sql = new DbCommand(new SqlConnection(connectionString), "Run sql connection from main class");
+            sql.Execute();
+
+            var oracle = new DbCommand(new OracleConnection(connectionString), "Run oracle connection from main class");
+            oracle.Execute();
         }
 
         public static void StopWatch()
