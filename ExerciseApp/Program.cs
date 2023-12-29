@@ -3,11 +3,12 @@ using System.Threading;
 
 namespace ExerciseApp
 {
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            
+            DbConnection();
         }
 
         public static void StopWatch()
@@ -77,6 +78,19 @@ namespace ExerciseApp
 
             var workFlowEngine = new WorkflowEngine();
             workFlowEngine.Run(workflow);
+        }
+
+        public static void DbConnection()
+        {
+            string connectionString = "Server=(local);Initial Catalog=AdventureWorks;" + "Integrated Security=true";
+
+            var sqlConnection = new SqlConnection(connectionString);
+            sqlConnection.OpenConnection();
+            sqlConnection.CloseConnection();
+
+            var oracleConnection = new OracleConnection(connectionString);
+            oracleConnection.OpenConnection();
+            oracleConnection.CloseConnection();
         }
     }
 }
